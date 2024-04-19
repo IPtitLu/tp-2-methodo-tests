@@ -46,8 +46,20 @@
  *     responses:
  *       204:
  *         description: Utilisateur supprimé avec succès
+ *       400:
+ *         description: Bad Request – client sent an invalid request, such as lacking required request body or parameter
+ *       401:
+ *         description: Unauthorized – client failed to authenticate with the server
+ *       403:
+ *         description: Forbidden – client authenticated but does not have permission to access the requested resource
  *       404:
- *         description: Utilisateur non trouvé
+ *         description: Not Found – the requested resource does not exist
+ *       412:
+ *         description: Precondition Failed – one or more conditions in the request header fields evaluated to false
+ *       500:
+ *         description: Internal Server Error – a generic error occurred on the server
+ *       505:
+ *         description: Service Unavailable – the requested service is not available
  * /users:
  *   get:
  *     summary: Récupère la liste des utilisateurs
@@ -69,6 +81,20 @@
  *     responses:
  *       201:
  *         description: Utilisateur créé avec succès
+ *       400:
+ *         description: Bad Request – client sent an invalid request, such as lacking required request body or parameter
+ *       401:
+ *         description: Unauthorized – client failed to authenticate with the server
+ *       403:
+ *         description: Forbidden – client authenticated but does not have permission to access the requested resource
+ *       404:
+ *         description: Not Found – the requested resource does not exist
+ *       412:
+ *         description: Precondition Failed – one or more conditions in the request header fields evaluated to false
+ *       500:
+ *         description: Internal Server Error – a generic error occurred on the server
+ *       505:
+ *         description: Service Unavailable – the requested service is not available
  *   put:
  *     summary: Met à jour un utilisateur existant
  *     description: Met à jour un utilisateur existant dans le système.
@@ -82,8 +108,20 @@
  *     responses:
  *       200:
  *         description: Utilisateur mis à jour avec succès
+ *       400:
+ *         description: Bad Request – client sent an invalid request, such as lacking required request body or parameter
+ *       401:
+ *         description: Unauthorized – client failed to authenticate with the server
+ *       403:
+ *         description: Forbidden – client authenticated but does not have permission to access the requested resource
  *       404:
- *         description: Utilisateur non trouvé
+ *         description: Not Found – the requested resource does not exist
+ *       412:
+ *         description: Precondition Failed – one or more conditions in the request header fields evaluated to false
+ *       500:
+ *         description: Internal Server Error – a generic error occurred on the server
+ *       505:
+ *         description: Service Unavailable – the requested service is not available
  *   delete:
  *     summary: Supprime tous les utilisateurs
  *     description: Supprime tous les utilisateurs enregistrés dans le système.
@@ -91,6 +129,20 @@
  *     responses:
  *       204:
  *         description: Utilisateurs supprimés avec succès
+ *       400:
+ *         description: Bad Request – client sent an invalid request, such as lacking required request body or parameter
+ *       401:
+ *         description: Unauthorized – client failed to authenticate with the server
+ *       403:
+ *         description: Forbidden – client authenticated but does not have permission to access the requested resource
+ *       404:
+ *         description: Not Found – the requested resource does not exist
+ *       412:
+ *         description: Precondition Failed – one or more conditions in the request header fields evaluated to false
+ *       500:
+ *         description: Internal Server Error – a generic error occurred on the server
+ *       505:
+ *         description: Service Unavailable – the requested service is not available
  * /users/login:
  *   post:
  *     summary: Connecte un utilisateur
@@ -105,6 +157,18 @@
  *     responses:
  *       200:
  *         description: Utilisateur connecté avec succès
+ *       400:
+ *         description: Bad Request – client sent an invalid request, such as lacking required request body or parameter
  *       401:
- *         description: Connexion non autorisée
+ *         description: Unauthorized – client failed to authenticate with the server
+ *       403:
+ *         description: Forbidden – client authenticated but does not have permission to access the requested resource
+ *       404:
+ *         description: Not Found – the requested resource does not exist
+ *       412:
+ *         description: Precondition Failed – one or more conditions in the request header fields evaluated to false
+ *       500:
+ *         description: Internal Server Error – a generic error occurred on the server
+ *       505:
+ *         description: Service Unavailable – the requested service is not available
  */
