@@ -40,7 +40,8 @@ class UserRepository {
             $set: {
                 email: document.email,
                 password: document.password,
-                age: document.age
+                age: document.age,
+                session: document.session
             }
         };
         await this.collection.updateOne(filter, updateDocument);
