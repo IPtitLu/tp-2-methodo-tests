@@ -1,11 +1,5 @@
 import express from 'express';
 
-/**
- * @swagger
- * tags:
- *   name: Cart
- *   description: Opérations relatives au panier d'un utilisateur.
- */
 class UserRouter {
   constructor(userController) {
     this.userController = userController;
