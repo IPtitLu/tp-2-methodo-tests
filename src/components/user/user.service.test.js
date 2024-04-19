@@ -29,7 +29,7 @@ describe('UserService', () => {
             const user = new User('test@example.com', 'password123', 42);
             const customMockUserRepository = {
                 getByEmail: jest.fn(() => undefined),
-                create: jest.fn((user) => new User(user.email, user.password, user.age, "661fa8f5185294c4fee1b41e"))
+                create: jest.fn((user) => new User(user.email, [], user.password, user.age, "661fa8f5185294c4fee1b41e"))
             }
             const customUserService = new UserService(customMockUserRepository);
 
