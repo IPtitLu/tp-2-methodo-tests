@@ -23,6 +23,7 @@
  *   delete:
  *     summary: Supprime une session par ID
  *     description: Supprime une session spécifique en fonction de son ID.
+ *     tags: [Session]
  *     parameters:
  *       - in: path
  *         name: id
@@ -39,6 +40,7 @@
  *   get:
  *     summary: Récupère toutes les sessions
  *     description: Récupère toutes les sessions enregistrées.
+ *     tags: [Session]
  *     responses:
  *       200:
  *         description: Sessions récupérées avec succès
@@ -47,6 +49,7 @@
  *   post:
  *     summary: Crée une nouvelle session
  *     description: Crée une nouvelle session avec les données fournies.
+ *     tags: [Session]
  *     responses:
  *       201:
  *         description: Session créée avec succès
@@ -55,6 +58,7 @@
  *   put:
  *     summary: Met à jour une session
  *     description: Met à jour une session existante avec les données fournies.
+ *     tags: [Session]
  *     responses:
  *       200:
  *         description: Session mise à jour avec succès
@@ -63,6 +67,7 @@
  *   delete:
  *     summary: Supprime toutes les sessions
  *     description: Supprime toutes les sessions enregistrées.
+ *     tags: [Session]
  *     responses:
  *       200:
  *         description: Sessions supprimées avec succès
@@ -72,6 +77,7 @@
  *   post:
  *     summary: Démarre une nouvelle session
  *     description: Démarre une nouvelle session avec l'ID de l'utilisateur et l'heure de début fournis.
+ *     tags: [Session]
  *     responses:
  *       201:
  *         description: Session démarrée avec succès
@@ -81,6 +87,7 @@
  *   post:
  *     summary: Termine une session existante
  *     description: Termine une session existante avec l'ID de la session et l'heure de fin fournis.
+ *     tags: [Session]
  *     responses:
  *       200:
  *         description: Session terminée avec succès
@@ -90,6 +97,7 @@
  *   post:
  *     summary: Ajoute une pause à une session
  *     description: Ajoute une pause à une session existante avec l'ID de la session, l'heure de début et l'heure de fin de la pause fournis.
+ *     tags: [Session]
  *     responses:
  *       200:
  *         description: Pause ajoutée avec succès
