@@ -47,6 +47,20 @@ class SessionRepository {
     await this.collection.deleteOne(query);
   }
 
+    async addPauseToSession(sessionId, debutPause, finPause) {
+    const query = { _id: new ObjectId(sessionId) };
+    const session = await this.collection.findOne(query);
+    if (!session) {
+      throw new Error('Session does not exist');
+    }
+    session.pauses.push({ debutPause, finPause });
+    await this.collection.updateOne(query, { $set: { pauses: session.pauses } });
+  }
+
+  createBsonId(id) {
+    return new ObjectId(id);
+  }
+
   createBsonId(id) {
     return new ObjectId(id);
   }
