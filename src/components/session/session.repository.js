@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import db from "../mongodb.db.js"; 
+import db from "../../mongo/db.js";
 import Session from "./session.entities.js"; 
 
 class SessionRepository {
