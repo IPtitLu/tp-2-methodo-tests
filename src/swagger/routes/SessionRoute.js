@@ -7,6 +7,7 @@
  *   get:
  *     summary: Récupère une session par ID
  *     description: Récupère une session spécifique en fonction de son ID.
+ *     tags: [Session]
  *     parameters:
  *       - in: path
  *         name: id

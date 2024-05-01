@@ -1,10 +1,10 @@
-import { ObjectId } from "mongodb";
-import db from "../../mongo/db.js";
-import Session from "./session.entities.js"; 
+import { ObjectId } from 'mongodb';
+import db from '../mongodb.db.js';
+import Session from './session.entities.js';
 
 class SessionRepository {
   constructor() {
-    this.collection = db.collection("sessions");
+    this.collection = db.collection('sessions');
   }
 
   async getById(id) {
@@ -15,7 +15,7 @@ class SessionRepository {
 
   async getAll() {
     const documents = await this.collection.find({}).toArray();
-    return documents.map(doc => Session.fromDocument(doc));
+    return documents.map((doc) => Session.fromDocument(doc));
   }
 
   async create(document) {
@@ -47,18 +47,21 @@ class SessionRepository {
     await this.collection.deleteOne(query);
   }
 
-    async addPauseToSession(sessionId, debutPause, finPause) {
-    const query = { _id: new ObjectId(sessionId) };
-    const session = await this.collection.findOne(query);
-    if (!session) {
-      throw new Error('Session does not exist');
-    }
-    session.pauses.push({ debutPause, finPause });
-    await this.collection.updateOne(query, { $set: { pauses: session.pauses } });
+  async getSessionsWithinRange(startDate, endDate) {
+    // Récupérer toutes les sessions dans la plage de dates spécifiée
+    const sessions = await this.collection
+      .find({
+        dateDebut: { $gte: startDate, $lt: endDate },
+      })
+      .toArray();
+
+    return sessions.map((doc) => Session.fromDocument(doc));
   }
 
-  createBsonId(id) {
-    return new ObjectId(id);
+  async getSessionsByUserId(userId) {
+    const query = { userId };
+    const documents = await this.collection.find(query).toArray();
+    return documents.map((doc) => Session.fromDocument(doc));
   }
 
   createBsonId(id) {

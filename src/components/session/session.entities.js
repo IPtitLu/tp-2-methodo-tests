@@ -1,5 +1,14 @@
 class Session {
-  constructor(userId, dateDebut, dateFin, pauses = [], etatOculaire = '', remarques = '', _id = null) {
+  constructor(
+    userId,
+    dateDebut,
+    dateFin,
+    pauses = [],
+    etatOculaire = '',
+    remarques = '',
+    _id = null,
+    duree,
+  ) {
     this._id = _id;
     this.userId = userId;
     this.dateDebut = dateDebut;
@@ -7,6 +16,26 @@ class Session {
     this.pauses = pauses;
     this.etatOculaire = etatOculaire;
     this.remarques = remarques;
+    this.duree = this.calculateDuration();
+  }
+
+  calculateDuration() {
+    // Calculer la durée en millisecondes en soustrayant la date de fin de la date de début
+    const diff = Math.abs(this.dateFin - this.dateDebut);
+    // Soustraire la durée des pauses éventuelles
+    const pauseDuration = this.calculatePauseDuration();
+    return diff - pauseDuration;
+  }
+
+  calculatePauseDuration() {
+    // Calculer la durée totale des pauses en millisecondes
+    let pauseDuration = 0;
+    // eslint-disable-next-line no-restricted-syntax
+    for (const pause of this.pauses) {
+      const pauseDiff = Math.abs(pause.finPause - pause.debutPause);
+      pauseDuration += pauseDiff;
+    }
+    return pauseDuration;
   }
 
   toJSON() {
@@ -17,7 +46,8 @@ class Session {
       dateFin: this.dateFin,
       pauses: this.pauses,
       etatOculaire: this.etatOculaire,
-      remarques: this.remarques
+      remarques: this.remarques,
+      duree: this.duree,
     };
   }
 
@@ -29,7 +59,8 @@ class Session {
       doc.pauses,
       doc.etatOculaire,
       doc.remarques,
-      doc._id
+      doc._id,
+      doc.duree,
     );
   }
 }

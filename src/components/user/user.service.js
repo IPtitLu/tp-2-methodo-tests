@@ -4,7 +4,7 @@ class UserService {
   }
 
   addUser = async (user) => {
-    if (await this.repository.getByEmail(user.email) == null) {
+    if ((await this.repository.getByEmail(user.email)) == null) {
       return await this.repository.create(user); // Ajoutez "await" ici pour obtenir la valeur renvoyée par la méthode create
     } else {
       throw new Error('User already exists');
@@ -16,13 +16,12 @@ class UserService {
     return await this.repository.update(user);
   };
 
-
   getUsers = () => this.repository.getAll();
 
   getUserById = async (id) => {
     const user = await this.repository.getById(id);
     if (user) {
-      return user
+      return user;
     } else {
       throw new Error('User does not exists');
     }
