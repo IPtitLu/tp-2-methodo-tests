@@ -5,18 +5,6 @@ class SessionController {
     this.sessionService = sessionService;
   }
 
-  createSession = async (req, res) => {
-    try {
-      const sessionData = req.body;
-      const createdSession = await this.sessionService.addSession(
-        new Session(sessionData),
-      );
-      res.status(201).json(createdSession.toJSON());
-    } catch (err) {
-      res.status(403).send({ message: err.message });
-    }
-  };
-
   updateSession = async (req, res) => {
     try {
       const sessionData = { ...req.body, _id: req.params.id };
@@ -71,13 +59,22 @@ class SessionController {
   startSession = async (req, res) => {
     try {
       const { userId, dateDebut } = req.body;
+
+      // Appeler la méthode startSession du service
       const newSession = await this.sessionService.startSession(
         userId,
         dateDebut,
       );
+
+      // Retourner la nouvelle session
       res.status(201).json(newSession.toJSON());
     } catch (err) {
-      res.status(403).send({ message: err.message });
+      // Gérer les erreurs
+      if (err.message === 'User not found') {
+        res.status(404).send({ message: 'User not found' });
+      } else {
+        res.status(403).send({ message: err.message });
+      }
     }
   };
 

@@ -32,6 +32,11 @@ class UserService {
 
   deleteUsers = () => this.repository.deleteAll();
 
+  checkUserExists = async (userId) => {
+    const user = await this.userRepository.getById(userId);
+    return !!user;
+  };
+
   login = (email, password) => {
     const user = this.repository.getByEmail(email);
     if (!user || user.password !== password) {

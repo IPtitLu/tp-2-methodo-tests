@@ -6,7 +6,8 @@
   "main": "src/index.js",
   "scripts": {
     "start": "nodemon --inspect src/index.js",
-    "test": "jest"
+    "test": "jest",
+    "clear": "jest --clearCache"
   },
   "keywords": [],
   "author": "",

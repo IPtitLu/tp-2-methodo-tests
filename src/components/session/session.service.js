@@ -1,16 +1,10 @@
 import { DateTime } from 'luxon';
 
 class SessionService {
-  constructor(repository) {
+  constructor(repository, userService) {
     this.repository = repository;
+    this.userService = userService;
   }
-
-  addSession = async (sessionData) => {
-    // Assuming that sessionData contains all required fields
-    // including userId, dateDebut, dateFin, pauses, etc.
-    const newSession = await this.repository.create(sessionData);
-    return newSession;
-  };
 
   updateSession = async (sessionData) => {
     // Assuming that sessionData contains _id to identify the session
@@ -42,7 +36,18 @@ class SessionService {
   deleteAllSessions = () => this.repository.deleteAll();
 
   startSession = async (userId, dateDebut) => {
+    // Vérifier si l'utilisateur existe
+    const userExists = await this.userService.checkUserExists(userId);
+    if (!userExists) {
+      throw new Error('User not found');
+    }
+
+    // Convertir la date de début dans le format approprié
     const formattedDateDebut = DateTime.fromISO(dateDebut).toUTC().toJSDate();
+
+    // if (!formattedDateDebut.isValid) {
+    //   throw new Error('Invalid start date');
+    // }
 
     // Calculer la durée totale des sessions précédentes dans les 24 heures précédentes
     const startDate = DateTime.fromJSDate(formattedDateDebut).startOf('day');
@@ -64,6 +69,7 @@ class SessionService {
       .plus({ milliseconds: remainingDuration })
       .toJSDate();
 
+    // Créer et enregistrer la nouvelle session
     const newSession = await this.repository.create({
       userId,
       dateDebut: formattedDateDebut,
@@ -71,6 +77,67 @@ class SessionService {
     });
     return newSession;
   };
+
+  /*
+  startSession = async (userId, dateDebut) => {
+      // Vérifier si l'utilisateur existe
+      const userExists = await this.userService.checkUserExists(userId);
+      if (!userExists) {
+        throw new Error('User not found');
+      }
+
+      // Convertir la date de début dans le format approprié
+      const formattedDateDebut = DateTime.fromISO(dateDebut);
+
+      // Vérifier si la date de début est valide
+      if (!formattedDateDebut.isValid) {
+        throw new Error('Invalid start date');
+      }
+
+      // Vérifier si la date de fin est antérieure à la date de début
+      const now = DateTime.now();
+      if (formattedDateDebut.toMillis() > now.toMillis()) {
+        throw new Error('End date is before start date');
+      }
+
+      // Vérifier si une session se chevauche avec la date de début
+      const sessionsWithin24Hours = await this.repository.getSessionsWithinRange(
+        formattedDateDebut,
+        formattedDateDebut,
+      );
+      if (sessionsWithin24Hours.length > 0) {
+        throw new Error('Another session is already in progress');
+      }
+
+      // Calculer la durée totale des sessions précédentes dans les 24 heures précédentes
+      const startDate = DateTime.fromJSDate(formattedDateDebut.toJSDate()).startOf('day');
+      const endDate = DateTime.fromJSDate(formattedDateDebut.toJSDate()).endOf('day');
+      const sessionsWithin24Hours = await this.repository.getSessionsWithinRange(
+        startDate,
+        endDate,
+      );
+      const totalDurationWithin24Hours = sessionsWithin24Hours.reduce(
+        (totalDuration, session) => {
+          return totalDuration + session.duration;
+        },
+        0,
+      );
+
+      // Calculer l'heure de fin de la nouvelle session pour atteindre une durée totale de 15 heures
+      const remainingDuration = 15 * 60 * 60 * 1000 - totalDurationWithin24Hours;
+      const dateFin = DateTime.fromJSDate(formattedDateDebut.toJSDate())
+        .plus({ milliseconds: remainingDuration })
+        .toJSDate();
+
+      // Créer et enregistrer la nouvelle session
+      const newSession = await this.repository.create({
+        userId,
+        dateDebut: formattedDateDebut.toJSDate(),
+        dateFin,
+      });
+      return newSession;
+    };
+  */
 
   endSession = async (sessionId, dateFin) => {
     const session = await this.repository.getById(sessionId);
@@ -128,7 +195,7 @@ class SessionService {
     };
   };
 
-  calculateAverageDuration(sessions) {
+  calculateAverageDuration = async (sessions) => {
     if (sessions.length === 0) {
       return 0;
     }
@@ -138,25 +205,25 @@ class SessionService {
       0,
     );
     return totalDuration / sessions.length;
-  }
+  };
 
-  calculateMinDuration(sessions) {
+  calculateMinDuration = async (sessions) => {
     if (sessions.length === 0) {
       return 0;
     }
 
     return Math.min(...sessions.map((session) => session.duree));
-  }
+  };
 
-  calculateMaxDuration(sessions) {
+  calculateMaxDuration = async (sessions) => {
     if (sessions.length === 0) {
       return 0;
     }
 
     return Math.max(...sessions.map((session) => session.duree));
-  }
+  };
 
-  calculateMedianDuration(sessions) {
+  calculateMedianDuration = async (sessions) => {
     if (sessions.length === 0) {
       return 0;
     }
@@ -173,9 +240,9 @@ class SessionService {
     } else {
       return sortedDurations[middleIndex];
     }
-  }
+  };
 
-  calculateMaxGapBetweenPorts(sessions) {
+  calculateMaxGapBetweenPorts = async (sessions) => {
     if (sessions.length <= 1) {
       return 0;
     }
@@ -188,7 +255,7 @@ class SessionService {
       }
     }
     return maxGap;
-  }
+  };
 }
 
 export default SessionService;

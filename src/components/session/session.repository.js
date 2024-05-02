@@ -64,6 +64,13 @@ class SessionRepository {
     return documents.map((doc) => Session.fromDocument(doc));
   }
 
+  async getLastSessionByUserId(userId) {
+    const query = { userId };
+    const sort = { dateFin: -1 }; // Trie par date de fin décroissante pour obtenir la dernière session
+    const document = await this.collection.findOne(query, { sort });
+    return document ? Session.fromDocument(document) : undefined;
+  }
+
   createBsonId(id) {
     return new ObjectId(id);
   }
